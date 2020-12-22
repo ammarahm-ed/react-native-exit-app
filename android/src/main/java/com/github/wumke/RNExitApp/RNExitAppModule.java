@@ -1,20 +1,16 @@
 package com.github.wumke.RNExitApp;
 
 import android.app.AlarmManager;
-import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Objects;
+
 
 public class RNExitAppModule extends ReactContextBaseJavaModule {
 
@@ -23,6 +19,7 @@ public class RNExitAppModule extends ReactContextBaseJavaModule {
 
     public RNExitAppModule(ReactApplicationContext reactContext) {
         super(reactContext);
+
         this.reactContext = reactContext;
         alarmManager = (AlarmManager) reactContext.getSystemService(Context.ALARM_SERVICE);
     }
@@ -34,6 +31,15 @@ public class RNExitAppModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void exitApp() {
-        android.os.Process.killProcess(android.os.Process.myPid());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                Objects.requireNonNull(getCurrentActivity()).finishAndRemoveTask();
+                getCurrentActivity().getIntent().setType("used");
+
+        } else {
+            Objects.requireNonNull(getCurrentActivity()).finishAffinity();
+        }
+
+
     }
 }

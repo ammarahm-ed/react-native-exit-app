@@ -23,7 +23,6 @@ public class RNExitAppPackage implements ReactPackage {
         return modules;
     }
 
-    // override removed to be compatible with rn0.47+
     //@Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
 
